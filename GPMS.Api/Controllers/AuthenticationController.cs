@@ -28,8 +28,8 @@ namespace GPMS.Api.Controllers
             _configuration = configuration;
         }
 
-        [HttpPost]
-        [HttpPost]
+      
+        [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] RegisterUser registerUser, string role)
         {
 
@@ -60,10 +60,10 @@ namespace GPMS.Api.Controllers
                 await _userManager.AddToRoleAsync(user, role);
 
                
-                var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+             /*   var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                 var confirmationLink = Url.Action(nameof(ConfirmEmail), "Authentication", new { token, email = user.Email }, Request.Scheme);
                 var message = new Message(new string[] { user.Email! }, "Confirmation email link", confirmationLink!);
-                _emailService.SendEmail(message);
+                _emailService.SendEmail(message);*/
 
 
 
