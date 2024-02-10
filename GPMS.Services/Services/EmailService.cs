@@ -1,15 +1,8 @@
-﻿using MimeKit;
-using MailKit.Net.Smtp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Mail;
-using System.Text;
-using System.Threading.Tasks;
-using SmtpClient = MailKit.Net.Smtp.SmtpClient;
-using GPMS.Core.Interfaces;
+﻿using GPMS.Core.Interfaces;
 using GPMS.Core.Models;
-
+using MimeKit;
+using MailKit.Net.Smtp;
+using SmtpClient = MailKit.Net.Smtp.SmtpClient;
 
 namespace GPMS.Services.Services
 {

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using GPMS.Core.Interfaces;
 
 namespace GPMS.Api.Controllers
 {
@@ -15,21 +16,21 @@ namespace GPMS.Api.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        //private readonly IEmailService _emailService;
+        private readonly IEmailService _emailService;
         private readonly IConfiguration _configuration;
 
         public AuthController(UserManager<IdentityUser> userManager,
-            RoleManager<IdentityRole> roleManager,
-            SignInManager<IdentityUser> signInManager, IConfiguration configuration)
+             RoleManager<IdentityRole> roleManager, IEmailService emailService,
+             SignInManager<IdentityUser> signInManager, IConfiguration configuration)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _signInManager = signInManager;
-           // _emailService = emailService;
+            _emailService = emailService;
             _configuration = configuration;
         }
 
-      
+
         [HttpPost]
         [Route("Register")]
         public async Task<IActionResult> Register([FromBody] RegisterUser registerUser, string role)

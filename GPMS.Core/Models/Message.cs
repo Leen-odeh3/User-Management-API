@@ -20,3 +20,4 @@ namespace GPMS.Core.Models
             Content = content;
         }
     }
+}
