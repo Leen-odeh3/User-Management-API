@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using GPMS.Core.Models.Authentication.SignUp;
+using GPMS.Core.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,6 +28,21 @@ namespace GPMS.Api.Controllers
             _configuration = configuration;
         }
 
+        [HttpPost]
+        [HttpPost]
+        public async Task<IActionResult> Register([FromBody] RegisterUser registerUser, string role)
+        {
 
-    }
+            var userExist = await _userManager.FindByEmailAsync(registerUser.Email);
+            if (userExist != null)
+            {
+                return StatusCode(StatusCodes.Status403Forbidden,
+                    new Response { Status = "Error", Message = "User already exists!" });
+            }
+
+
+            return Ok();
+        }
+
+        }
 }
