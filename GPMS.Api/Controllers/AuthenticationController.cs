@@ -76,10 +76,6 @@ namespace GPMS.Api.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError,
                         new Response { Status = "Error", Message = "This Role Doesnot Exist." });
             }
-
-
-
-            return Ok();
         }
 
         }
