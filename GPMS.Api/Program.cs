@@ -38,8 +38,8 @@ namespace GPMS.Api
                 {
                     ValidateIssuer = true,
                     ValidateAudience = true,
-                    ValidAudience = configuration["JWT:ValidAudience"],
-                    ValidIssuer = configuration["JWT:ValidIssuer"],
+                    ValidAudience = builder.configuration["JWT:ValidAudience"],
+                    ValidIssuer = builder.configuration["JWT:ValidIssuer"],
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]))
                 };
             });
