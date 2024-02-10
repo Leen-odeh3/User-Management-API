@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\GPMS.Core\GPMS.Core.csproj" />
+  </ItemGroup>
+
 </Project>
