@@ -1,4 +1,7 @@
+using GPMS.Core.Interfaces;
+using GPMS.Core.Models;
 using GPMS.Repository.Data;
+using GPMS.Services.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -20,10 +23,16 @@ namespace GPMS.Api
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            // For Identity
+
             builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-                .AddEntityFrameworkStores<AppDbContext>()
-                .AddDefaultTokenProviders();
+               .AddEntityFrameworkStores<AppDbContext>()
+                   .AddDefaultTokenProviders();
+
+            //Add Config for Required Email
+            builder.Services.Configure<IdentityOptions>(
+                opts => opts.SignIn.RequireConfirmedEmail = true
+                );
+
             // Adding Authentication
             builder.Services.AddAuthentication(options =>
             {
@@ -43,6 +52,23 @@ namespace GPMS.Api
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"]))
                 };
             });
+
+
+            //Add Email Configs
+            var emailConfig = builder.Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>();
+            builder.Services.AddSingleton(emailConfig);
+
+            builder.Services.AddScoped<IEmailService, EmailService>();
+
+            builder.Services.Configure<DataProtectionTokenProviderOptions>(option =>
+            {
+                option.TokenLifespan = TimeSpan.FromHours(1);
+            });
+
+
+
+
+
 
             builder.Services.AddDbContext<AppDbContext>(opt => 
             opt.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
