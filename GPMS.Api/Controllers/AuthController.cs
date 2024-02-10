@@ -92,9 +92,48 @@ namespace GPMS.Api.Controllers
             }
             catch (Exception ex)
             {
-                // Return an error response
+             
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     new Response { Status = "Error", Message = "An error occurred while fetching users." });
+            }
+        }
+
+
+        [HttpDelete("DeleteUser/{userId}")]  // Define your route for the DELETE request, for example, "api/auth/DeleteUser/{userId}"
+        public async Task<IActionResult> DeleteUser(string userId)
+        {
+            try
+            {
+                // Find the user by userId
+                var user = await _userManager.FindByIdAsync(userId);
+
+                // Check if the user exists
+                if (user == null)
+                {
+                    return NotFound(new Response { Status = "Error", Message = "User not found." });
+                }
+
+                // Delete the user from the database
+                var result = await _userManager.DeleteAsync(user);
+
+                // Check if the deletion was successful
+                if (result.Succeeded)
+                {
+                    return Ok(new Response { Status = "Success", Message = "User deleted successfully." });
+                }
+                else
+                {
+                    // Return error response if the deletion fails
+                    return StatusCode(StatusCodes.Status500InternalServerError,
+                        new Response { Status = "Error", Message = "Failed to delete user." });
+                }
+            }
+            catch (Exception ex)
+            {
+
+                // Return an error response
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new Response { Status = "Error", Message = "An error occurred while deleting the user." });
             }
         }
 
