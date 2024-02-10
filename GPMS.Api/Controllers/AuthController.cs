@@ -186,7 +186,22 @@ namespace GPMS.Api.Controllers
             }
         }
 
-
+        [HttpGet("ConfirmEmail")]
+        public async Task<IActionResult> ConfirmEmail(string token, string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user != null)
+            {
+                var result = await _userManager.ConfirmEmailAsync(user, token);
+                if (result.Succeeded)
+                {
+                    return StatusCode(StatusCodes.Status200OK,
+                      new Response { Status = "Success", Message = "Email Verified Successfully" });
+                }
+            }
+            return StatusCode(StatusCodes.Status500InternalServerError,
+                       new Response { Status = "Error", Message = "This User Doesnot exist!" });
+        }
 
 
     }
