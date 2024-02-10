@@ -1,10 +1,7 @@
 ﻿using GPMS.Core.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using GPMS.Core.Models;
+using MimeKit;
 using System.Net.Mail;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GPMS.Services.Services
 {
