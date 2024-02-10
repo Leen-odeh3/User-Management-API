@@ -3,12 +3,13 @@ using GPMS.Core.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace GPMS.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthenticationController : ControllerBase
+    public class AuthController : ControllerBase
     {
 
         private readonly UserManager<IdentityUser> _userManager;
@@ -17,7 +18,7 @@ namespace GPMS.Api.Controllers
         //private readonly IEmailService _emailService;
         private readonly IConfiguration _configuration;
 
-        public AuthenticationController(UserManager<IdentityUser> userManager,
+        public AuthController(UserManager<IdentityUser> userManager,
             RoleManager<IdentityRole> roleManager,
             SignInManager<IdentityUser> signInManager, IConfiguration configuration)
         {
@@ -78,5 +79,24 @@ namespace GPMS.Api.Controllers
             }
         }
 
+        [HttpGet("GetAllUsers")]  // Define your route for the GET request, for example, "api/auth/GetAllUsers"
+        public async Task<IActionResult> GetAllUsers()
+        {
+            try
+            {
+                // Retrieve all users or any information you want to expose
+                var allUsers = await _userManager.Users.ToListAsync();  // Example: fetching all users
+
+                // Return the list of users or relevant information
+                return Ok(allUsers);
+            }
+            catch (Exception ex)
+            {
+                // Return an error response
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new Response { Status = "Error", Message = "An error occurred while fetching users." });
+            }
         }
+
+    }
 }
