@@ -39,6 +39,13 @@ namespace GPMS.Api.Controllers
                 return StatusCode(StatusCodes.Status403Forbidden,
                     new Response { Status = "Error", Message = "User already exists!" });
             }
+            IdentityUser user = new()
+            {
+                Email = registerUser.Email,
+                SecurityStamp = Guid.NewGuid().ToString(),
+                UserName = registerUser.Username,
+                TwoFactorEnabled = true
+            };
 
 
             return Ok();
