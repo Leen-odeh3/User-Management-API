@@ -5,6 +5,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using GPMS.Core.Interfaces;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace GPMS.Api.Controllers
 {
@@ -35,13 +39,15 @@ namespace GPMS.Api.Controllers
         [Route("Register")]
         public async Task<IActionResult> Register([FromBody] RegisterUser registerUser, string role)
         {
-
+            //Check User Exist 
             var userExist = await _userManager.FindByEmailAsync(registerUser.Email);
             if (userExist != null)
             {
                 return StatusCode(StatusCodes.Status403Forbidden,
                     new Response { Status = "Error", Message = "User already exists!" });
             }
+
+            //Add the User in the database
             IdentityUser user = new()
             {
                 Email = registerUser.Email,
@@ -49,7 +55,6 @@ namespace GPMS.Api.Controllers
                 UserName = registerUser.Username,
                 TwoFactorEnabled = true
             };
-
             if (await _roleManager.RoleExistsAsync(role))
             {
                 var result = await _userManager.CreateAsync(user, registerUser.Password);
@@ -58,15 +63,15 @@ namespace GPMS.Api.Controllers
                     return StatusCode(StatusCodes.Status500InternalServerError,
                         new Response { Status = "Error", Message = "User Failed to Create" });
                 }
-
+                //Add role to the user....
 
                 await _userManager.AddToRoleAsync(user, role);
 
-               
-             /*   var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                //Add Token to Verify the email....
+                var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                 var confirmationLink = Url.Action(nameof(ConfirmEmail), "Authentication", new { token, email = user.Email }, Request.Scheme);
                 var message = new Message(new string[] { user.Email! }, "Confirmation email link", confirmationLink!);
-                _emailService.SendEmail(message);*/
+                _emailService.SendEmail(message);
 
 
 
@@ -79,8 +84,9 @@ namespace GPMS.Api.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError,
                         new Response { Status = "Error", Message = "This Role Doesnot Exist." });
             }
-        }
 
+
+        }
         [HttpGet("GetAllUsers")]  // Define your route for the GET request, for example, "api/auth/GetAllUsers"
         public async Task<IActionResult> GetAllUsers()
         {
@@ -204,6 +210,23 @@ namespace GPMS.Api.Controllers
                        new Response { Status = "Error", Message = "This User Doesnot exist!" });
         }
 
+
+
+
+        private JwtSecurityToken GetToken(List<Claim> authClaims)
+        {
+            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
+
+            var token = new JwtSecurityToken(
+                issuer: _configuration["JWT:ValidIssuer"],
+                audience: _configuration["JWT:ValidAudience"],
+                expires: DateTime.Now.AddDays(2),
+                claims: authClaims,
+                signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
+                );
+
+            return token;
+        }
 
     }
 }

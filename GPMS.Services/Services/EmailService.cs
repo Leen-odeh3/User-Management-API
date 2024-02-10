@@ -1,20 +1,15 @@
 ﻿using GPMS.Core.Interfaces;
 using GPMS.Core.Models;
-using MimeKit;
 using MailKit.Net.Smtp;
-using SmtpClient = MailKit.Net.Smtp.SmtpClient;
+using MimeKit;
 
-namespace GPMS.Services.Services
+
+namespace User.Management.Service.Services
 {
     public class EmailService : IEmailService
     {
         private readonly EmailConfiguration _emailConfig;
         public EmailService(EmailConfiguration emailConfig) => _emailConfig = emailConfig;
-        public EmailService()
-        {
-            
-        }
-
         public void SendEmail(Message message)
         {
             var emailMessage = CreateEmailMessage(message);

@@ -1,12 +1,12 @@
 using GPMS.Core.Interfaces;
 using GPMS.Core.Models;
 using GPMS.Repository.Data;
-using GPMS.Services.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using User.Management.Service.Services;
 
 namespace GPMS.Api
 {
