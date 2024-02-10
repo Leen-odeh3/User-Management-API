@@ -1,4 +1,5 @@
 using GPMS.Repository.Data;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace GPMS.Api
@@ -15,6 +16,11 @@ namespace GPMS.Api
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            // For Identity
+            builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<AppDbContext>()
+                .AddDefaultTokenProviders();
 
             builder.Services.AddDbContext<AppDbContext>(opt => 
             opt.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
