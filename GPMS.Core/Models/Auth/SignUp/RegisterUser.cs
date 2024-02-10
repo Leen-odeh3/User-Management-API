@@ -11,10 +11,7 @@ namespace GPMS.Core.Models.Authentication.SignUp
     public class RegisterUser
 
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-
+       
         [Required(ErrorMessage = "User Name is required")]
         public string? Username { get; set; }
 
