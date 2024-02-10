@@ -4,6 +4,7 @@ using GPMS.Repository.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GPMS.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240210102538_Auth added Services")]
+    partial class AuthaddedServices
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -47,36 +49,6 @@ namespace GPMS.Repository.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "1",
-                            ConcurrencyStamp = "1",
-                            Name = "Admin",
-                            NormalizedName = "Admin"
-                        },
-                        new
-                        {
-                            Id = "2",
-                            ConcurrencyStamp = "2",
-                            Name = "Student",
-                            NormalizedName = "Student"
-                        },
-                        new
-                        {
-                            Id = "3",
-                            ConcurrencyStamp = "3",
-                            Name = "HeadOfDepartment",
-                            NormalizedName = "HeadOfDepartment"
-                        },
-                        new
-                        {
-                            Id = "4",
-                            ConcurrencyStamp = "4",
-                            Name = "Supervisor",
-                            NormalizedName = "Supervisor"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
