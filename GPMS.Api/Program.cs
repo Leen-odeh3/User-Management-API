@@ -1,3 +1,6 @@
+using GPMS.Repository.Data;
+using Microsoft.EntityFrameworkCore;
+
 namespace GPMS.Api
 {
     public class Program
@@ -13,6 +16,8 @@ namespace GPMS.Api
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.Services.AddDbContext<AppDbContext>(opt => 
+            opt.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
