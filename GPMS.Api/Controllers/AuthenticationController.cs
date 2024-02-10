@@ -47,6 +47,37 @@ namespace GPMS.Api.Controllers
                 TwoFactorEnabled = true
             };
 
+            if (await _roleManager.RoleExistsAsync(role))
+            {
+                var result = await _userManager.CreateAsync(user, registerUser.Password);
+                if (!result.Succeeded)
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError,
+                        new Response { Status = "Error", Message = "User Failed to Create" });
+                }
+
+
+                await _userManager.AddToRoleAsync(user, role);
+
+               
+                var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                var confirmationLink = Url.Action(nameof(ConfirmEmail), "Authentication", new { token, email = user.Email }, Request.Scheme);
+                var message = new Message(new string[] { user.Email! }, "Confirmation email link", confirmationLink!);
+                _emailService.SendEmail(message);
+
+
+
+                return StatusCode(StatusCodes.Status200OK,
+                    new Response { Status = "Success", Message = $"User created & Email Sent to {user.Email} SuccessFully" });
+
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                        new Response { Status = "Error", Message = "This Role Doesnot Exist." });
+            }
+
+
 
             return Ok();
         }
