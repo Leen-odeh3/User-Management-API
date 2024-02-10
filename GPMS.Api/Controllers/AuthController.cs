@@ -137,5 +137,56 @@ namespace GPMS.Api.Controllers
             }
         }
 
+
+        [HttpPut("UpdateUser/{userId}")]
+        public async Task<IActionResult> UpdateUser(string userId, [FromBody] RegisterUser updateUserDto)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(userId) || updateUserDto == null)
+                {
+                    return BadRequest(new Response { Status = "Error", Message = "Invalid input parameters." });
+                }
+
+                // Find the user by userId
+                var user = await _userManager.FindByIdAsync(userId);
+
+                // Check if the user exists
+                if (user == null)
+                {
+                    return NotFound(new Response { Status = "Error", Message = "User not found." });
+                }
+
+                // Update user information
+                user.Email = updateUserDto.Email;
+                user.UserName = updateUserDto.Username;
+
+                // Update the user in the database
+                var result = await _userManager.UpdateAsync(user);
+
+                // Check if the update was successful
+                if (result.Succeeded)
+                {
+                    return Ok(new Response { Status = "Success", Message = "User updated successfully." });
+                }
+                else
+                {
+                    // Return error response if the update fails
+                    return StatusCode(StatusCodes.Status500InternalServerError,
+                        new Response { Status = "Error", Message = "Failed to update user." });
+                }
+            }
+            catch (Exception ex)
+            {
+
+
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new Response { Status = "Error", Message = "An error occurred while updating the user." });
+            }
+        }
+
+
+
+
     }
 }
