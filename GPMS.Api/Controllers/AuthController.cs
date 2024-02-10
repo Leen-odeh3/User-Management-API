@@ -30,7 +30,8 @@ namespace GPMS.Api.Controllers
         }
 
       
-        [HttpPost("Register")]
+        [HttpPost]
+        [Route("Register")]
         public async Task<IActionResult> Register([FromBody] RegisterUser registerUser, string role)
         {
 
