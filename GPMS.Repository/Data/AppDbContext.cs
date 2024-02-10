@@ -16,7 +16,7 @@ namespace GPMS.Repository.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            SeedRoles(builder);
+            SeedRoles(modelBuilder);
 
         }
 
