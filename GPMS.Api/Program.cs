@@ -1,7 +1,7 @@
 using GPMS.Core.Interfaces;
 using GPMS.Core.Models;
 using GPMS.Repository.Data;
-using GPMS.Services.Services;
+using Infrastructure.GPMS.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
