@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,21 @@ namespace GPMS.Repository.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            SeedRoles(builder);
+
         }
 
+        private static void SeedRoles(ModelBuilder builder)
+        {
+            builder.Entity<IdentityRole>().HasData
+                (
+                new IdentityRole() {Id="1", Name = "Admin", ConcurrencyStamp = "1", NormalizedName = "Admin" },
+                new IdentityRole() {Id = "2", Name = "Student", ConcurrencyStamp = "2", NormalizedName = "Student" },
+                new IdentityRole() {Id = "3", Name = "HeadOfDepartment", ConcurrencyStamp = "3", NormalizedName = "HeadOfDepartment" },
+                new IdentityRole() {Id = "4", Name = "Supervisor", ConcurrencyStamp = "4", NormalizedName = "Supervisor" }
+
+
+                );
+        }
     }
 }
