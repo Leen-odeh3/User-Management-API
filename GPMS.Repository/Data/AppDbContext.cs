@@ -35,6 +35,6 @@ namespace GPMS.Repository.Data
         }
 
         public DbSet<Project>  Projects { get; set; }
-        public DbSet<Department> Department { get; set; }
+        public DbSet<Department> Departments { get; set; }
     }
 }
