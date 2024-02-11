@@ -4,6 +4,11 @@ using GPMS.Repository.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace GPMS.Api.Controllers
 {
@@ -12,38 +17,30 @@ namespace GPMS.Api.Controllers
     public class ProjectsController : ControllerBase
     {
         private readonly AppDbContext _context;
+
         public ProjectsController(AppDbContext context)
         {
             _context = context;
         }
 
         [HttpGet]
-        public async Task<IActionResult> AllItems()
+        public async Task<IActionResult> GetAllItems()
         {
-            var items = await _context.Projects.ToListAsync();
+            var items = await _context.Projects.Include(p => p.Department).ToListAsync();
             return Ok(items);
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> AllItems(int id)
-        {
-            var item = await _context.Projects.SingleOrDefaultAsync(x => x.Id == id);
-            if (item == null)
-            {
-                return NotFound($"Item Code {id} not exists!");
-            }
-            return Ok(item);
-        }
+        
 
         [HttpGet("ProjectsDepartment/{deptid}")]
-        public async Task<IActionResult> AllItemsWithCategory(int deptid)
+        public async Task<IActionResult> GetItemsByDepartment(int deptid)
         {
-            var item = await _context.Projects.Where(x => x.DeptID == deptid).ToListAsync();
-            if (item == null)
+            var items = await _context.Projects.Include(p => p.Department).Where(x => x.DeptID == deptid).ToListAsync();
+            if (items == null || !items.Any())
             {
-                return NotFound($"Category Id {deptid} has no items!");
+                return NotFound($"No items found for department with id {deptid}!");
             }
-            return Ok(item);
+            return Ok(items);
         }
 
         [HttpPost]
@@ -57,46 +54,46 @@ namespace GPMS.Api.Controllers
                 Description = mdl.Description,
                 Year = mdl.Year,
                 Images = stream.ToArray(),
-                DeptID= mdl.DeptID
+                DeptID = mdl.DeptID
             };
             await _context.Projects.AddAsync(item);
             await _context.SaveChangesAsync();
             return Ok(item);
         }
 
-
-
-
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProject(int id)
         {
-            var item = await _context.Projects.SingleOrDefaultAsync(x => x.Id == id);
+            var item = await _context.Projects.FirstOrDefaultAsync(x => x.Id == id);
             if (item == null)
             {
-                return NotFound($"  item id {id} not exists !");
+                return NotFound($"Item with id {id} not found!");
             }
             _context.Projects.Remove(item);
             await _context.SaveChangesAsync();
             return Ok(item);
         }
+
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateProject(int id, [FromForm] Project mdl)
+        public async Task<IActionResult> UpdateProject(int id, [FromForm] ProjectDto mdl)
         {
             var item = await _context.Projects.FindAsync(id);
             if (item == null)
             {
-                return NotFound($"Item id {id} not exists !");
+                return NotFound($"Item with id {id} not found!");
             }
 
             var isDepartmentExists = await _context.Departments.AnyAsync(x => x.Id == mdl.DeptID);
             if (!isDepartmentExists)
             {
-                return NotFound($"Department id {mdl.DeptID} not exists !");
+                return NotFound($"Department with id {mdl.DeptID} not found!");
             }
 
             if (mdl.Images != null)
             {
-                item.Images = mdl.Images;
+                using var stream = new MemoryStream();
+                await mdl.Images.CopyToAsync(stream);
+                item.Images = stream.ToArray();
             }
 
             item.Title = mdl.Title;
@@ -107,7 +104,5 @@ namespace GPMS.Api.Controllers
             await _context.SaveChangesAsync();
             return Ok(item);
         }
-
-
     }
 }
