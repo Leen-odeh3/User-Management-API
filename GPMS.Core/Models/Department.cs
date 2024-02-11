@@ -15,5 +15,7 @@ namespace GPMS.Core.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public string HeadOfDepartment { get; set; }
+
+        public ICollection<Project> Projects { get; set; }
     }
 }

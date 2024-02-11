@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using GPMS.Core.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -32,5 +33,8 @@ namespace GPMS.Repository.Data
 
                 );
         }
+
+        public DbSet<Project>  Projects { get; set; }
+        public DbSet<Department> Department { get; set; }
     }
 }
