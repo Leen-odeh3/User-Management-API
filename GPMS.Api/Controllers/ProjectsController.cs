@@ -1,4 +1,5 @@
-﻿using GPMS.Core.Models;
+﻿using GPMS.Api.DTO;
+using GPMS.Core.Models;
 using GPMS.Repository.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -34,7 +35,7 @@ namespace GPMS.Api.Controllers
             return Ok(item);
         }
 
-        [HttpGet("Project/Department/{deptid}")]
+        [HttpGet("ProjectsDepartment/{deptid}")]
         public async Task<IActionResult> AllItemsWithCategory(int deptid)
         {
             var item = await _context.Projects.Where(x => x.DeptID == deptid).ToListAsync();
@@ -45,26 +46,24 @@ namespace GPMS.Api.Controllers
             return Ok(item);
         }
 
-
         [HttpPost]
-        public async Task<IActionResult> AddItem([FromForm] Project project)
+        public async Task<IActionResult> AddItem([FromForm] ProjectDto mdl)
         {
             using var stream = new MemoryStream();
-            await project.Images.CopyToAsync(stream);
-
-
+            await mdl.Images.CopyToAsync(stream);
             var item = new Project
             {
-                Title= project.Title,
-                Description = project.Description,
-                Year = project.Year,
-                DeptID= project.Id,
-                Images = stream.ToArray()
+                Title = mdl.Title,
+                Description = mdl.Description,
+                Year = mdl.Year,
+                Images = stream.ToArray(),
+                DeptID= mdl.DeptID
             };
             await _context.Projects.AddAsync(item);
             await _context.SaveChangesAsync();
             return Ok(item);
         }
+
 
 
 
@@ -80,27 +79,24 @@ namespace GPMS.Api.Controllers
             await _context.SaveChangesAsync();
             return Ok(item);
         }
-
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateProject(int id, [FromForm] Project mdl)
         {
             var item = await _context.Projects.FindAsync(id);
             if (item == null)
             {
-                return NotFound($"Item with id {id} not found!");
+                return NotFound($"Item id {id} not exists !");
             }
 
             var isDepartmentExists = await _context.Departments.AnyAsync(x => x.Id == mdl.DeptID);
             if (!isDepartmentExists)
             {
-                return NotFound($"Department with id {mdl.DeptID} not found!");
+                return NotFound($"Department id {mdl.DeptID} not exists !");
             }
 
             if (mdl.Images != null)
             {
-                using var stream = new MemoryStream();
-                await mdl.Images.CopyToAsync(stream);
-                item.Images = stream.ToArray();
+                item.Images = mdl.Images;
             }
 
             item.Title = mdl.Title;

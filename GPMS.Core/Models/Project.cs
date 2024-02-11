@@ -19,7 +19,7 @@ namespace GPMS.Core.Models
 
         public byte[]? Images { get; set; }
 
-        [ForeignKey("Department ")]
+        [ForeignKey("Department")]
         public int DeptID { get; set; }
         public Department Department { get; set; }
     }

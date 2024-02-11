@@ -4,6 +4,7 @@ using GPMS.Repository.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GPMS.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240211161604_delete sthh")]
+    partial class deletesthh
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,56 +43,6 @@ namespace GPMS.Repository.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Departments");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            HeadOfDepartment = "Dr. Thaer Samar",
-                            Name = "Computer Systems Engineering"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            HeadOfDepartment = "Dr. Mahmoud Ismail",
-                            Name = "Electrical Engineering"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            HeadOfDepartment = "Dr. Nabil Al-Tanna",
-                            Name = "Mechatronics Engineering"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            HeadOfDepartment = "Dr. Jafar Masri",
-                            Name = "Mechanical Engineering"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            HeadOfDepartment = "Mr. Mahmoud Sawalha",
-                            Name = "Telecommunications Engineering and Technology"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            HeadOfDepartment = "Dr. Nabil Al-Tanna",
-                            Name = "Sustainable Energy Engineering"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            HeadOfDepartment = "Mr. Bassel Salameh",
-                            Name = "Civil Engineering and Surveying"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            HeadOfDepartment = "Dr. Shaher Ziyod",
-                            Name = "Architectural Engineering"
-                        });
                 });
 
             modelBuilder.Entity("GPMS.Core.Models.Project", b =>

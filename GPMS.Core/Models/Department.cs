@@ -16,6 +16,6 @@ namespace GPMS.Core.Models
         public string Name { get; set; }
         public string HeadOfDepartment { get; set; }
 
-        public ICollection<Project> Projects { get; set; }
+     
     }
 }
