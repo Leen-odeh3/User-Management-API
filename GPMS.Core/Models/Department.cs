@@ -8,17 +8,12 @@ using System.Threading.Tasks;
 
 namespace GPMS.Core.Models
 {
-    public class Project
+   public class Department
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public string Title { get; set; }
-        public string Description { get; set; }
-        public string Year{ get; set; }
-
-        public byte[]? Images { get; set; }
-
-        
+        public string Name { get; set; }
+        public string HeadOfDepartment { get; set; }
     }
 }
